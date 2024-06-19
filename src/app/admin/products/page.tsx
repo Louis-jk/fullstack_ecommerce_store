@@ -4,10 +4,13 @@ import Link from 'next/link';
 import {
   Table,
   TableBody,
+  TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import db from '@/db/db';
+import { CheckCircle2, XCircle } from 'lucide-react';
 
 export default function AdminProductPage() {
   return (
@@ -23,7 +26,20 @@ export default function AdminProductPage() {
   );
 }
 
-function ProductsTable() {
+async function ProductsTable() {
+  const products = await db.product.findMany({
+    select: {
+      id: true,
+      name: true,
+      priceInCents: true,
+      inAvailableForPurchase: true,
+      _count: { select: { orders: true } },
+    },
+    orderBy: { name: 'asc' },
+  });
+
+  if (products.length === 0) return <p>No products found</p>;
+
   return (
     <Table>
       <TableHeader>
@@ -39,7 +55,26 @@ function ProductsTable() {
           </TableHead>
         </TableRow>
       </TableHeader>
-      <TableBody></TableBody>
+      <TableBody>
+        {products.map((product) => (
+          <TableRow key={product.id}>
+            <TableCell>
+              {product.inAvailableForPurchase ? (
+                <>
+                  <CheckCircle2 />
+                  <span className='sr-only'>Available</span>
+                </>
+              ) : (
+                <>
+                  <XCircle />
+                  <span className='sr-only'>Unavailable</span>
+                </>
+              )}
+            </TableCell>
+            <TableCell>{product.name}</TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
     </Table>
   );
 }

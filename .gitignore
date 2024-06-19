@@ -39,3 +39,6 @@ next-env.d.ts
 # db
 prisma/migrations
 prisma/*.db*
+
+#data
+products
