@@ -10,7 +10,14 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import db from '@/db/db';
-import { CheckCircle2, XCircle } from 'lucide-react';
+import { CheckCircle2, MoreVertical, XCircle } from 'lucide-react';
+import { formatCurrency, formatNumber } from '@/lib/formatter';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 export default function AdminProductPage() {
   return (
@@ -72,6 +79,23 @@ async function ProductsTable() {
               )}
             </TableCell>
             <TableCell>{product.name}</TableCell>
+            <TableCell>{formatCurrency(product.priceInCents / 100)}</TableCell>
+            <TableCell>{formatNumber(product._count.orders)}</TableCell>
+            <TableCell>
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <MoreVertical />
+                  <span className='sr-only'>Actions</span>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem>
+                    <a download href={`/admin/products/${product.id}/download`}>
+                      Download
+                    </a>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>
