@@ -12,4 +12,5 @@
       </tr>
   </table>-->
 
-![alt text](image.png)
+<img width="1510" alt="image" src="https://github.com/Louis-jk/fullstack_ecommerce_store/assets/25785760/61d533df-4a03-426b-b09c-a54269277d4e">
+
