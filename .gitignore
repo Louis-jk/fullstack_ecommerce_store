@@ -41,5 +41,6 @@ prisma/migrations
 prisma/*.db*
 
 #data
-products
+/products
+/public/products
 prisma/index.mjs
