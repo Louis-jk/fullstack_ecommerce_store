@@ -44,3 +44,6 @@ prisma/*.db*
 /products
 /public/products
 prisma/index.mjs
+
+#Etc
+.vscode
