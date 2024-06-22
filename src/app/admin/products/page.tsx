@@ -18,6 +18,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  ActiveToggleDropdownItem,
+  DeleteDropdownItem,
+} from './_components/ProductAction';
 
 export default function AdminProductPage() {
   return (
@@ -39,7 +43,7 @@ async function ProductsTable() {
       id: true,
       name: true,
       priceInCents: true,
-      inAvailableForPurchase: true,
+      isAvailableForPurchase: true,
       _count: { select: { orders: true } },
     },
     orderBy: { name: 'asc' },
@@ -66,14 +70,14 @@ async function ProductsTable() {
         {products.map((product) => (
           <TableRow key={product.id}>
             <TableCell>
-              {product.inAvailableForPurchase ? (
+              {product.isAvailableForPurchase ? (
                 <>
                   <CheckCircle2 />
                   <span className='sr-only'>Available</span>
                 </>
               ) : (
                 <>
-                  <XCircle />
+                  <XCircle className='stroke-destructive' />
                   <span className='sr-only'>Unavailable</span>
                 </>
               )}
@@ -88,11 +92,24 @@ async function ProductsTable() {
                   <span className='sr-only'>Actions</span>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem asChild>
                     <a download href={`/admin/products/${product.id}/download`}>
                       Download
                     </a>
                   </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href={`/admin/products/${product.id}/edit`}>
+                      Edit
+                    </Link>
+                  </DropdownMenuItem>
+                  <ActiveToggleDropdownItem
+                    id={product.id}
+                    isAvailableForPurchase={product.isAvailableForPurchase}
+                  />
+                  <DeleteDropdownItem
+                    id={product.id}
+                    disabled={product._count.orders > 0}
+                  />
                 </DropdownMenuContent>
               </DropdownMenu>
             </TableCell>
